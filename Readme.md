@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Marianna Minich](https://up.htmlacademy.ru/nodejs-api/6/user/788161).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Поклонский](https://htmlacademy.ru/profile/id2210683).
 
 ---
 
