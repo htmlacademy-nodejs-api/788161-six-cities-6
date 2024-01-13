@@ -7,3 +7,14 @@ export enum Facilities {
     Towels = 'Towels',
     Fridge = 'Fridge',
 }
+
+
+export const facilitiesMapping: Record<string, Facilities> = {
+  'Breakfast': Facilities.Breakfast,
+  'Air conditioning': Facilities.AirConditioning,
+  'Laptop friendly workspace': Facilities.LaptopFriendlyWorkspace,
+  'Baby seat': Facilities.BabySeat,
+  'Washer': Facilities.Washer,
+  'Towels': Facilities.Towels,
+  'Fridge': Facilities.Fridge,
+};
