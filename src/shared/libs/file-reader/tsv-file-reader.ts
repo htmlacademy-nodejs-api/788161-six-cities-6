@@ -19,7 +19,6 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseFacilities(facility: string): Facilities[] {
-    console.log('VALUE facility', facility);
     return facility.split(',').map((facilityItem) => facilitiesMapping[facilityItem.trim()]);
   }
 
@@ -30,17 +29,10 @@ export class TSVFileReader implements FileReader {
     return this.rawData
       .split('\n')
       .filter((row) => row.trim().length > 0)
-      .map((line) => {
-        console.log('LINE', line);
-        return line.split('\t');
-      })
+      .map((line) => line.split('\t'))
       .map(([title, description, publicationDate, cityValue, previewImage, housingPhotosList, isPremium, isFavorite, rating, apartmentType, roomAmount, guestAmount, rentalCost, facilitiesStr, firstname, email, avatarPath, password, userTypeValue, commentsAmount, latitude, longitude ]) => {
         const facilities: Facilities[] = this.parseFacilities(facilitiesStr);
-        console.log('facilities', facilities);
-        // const city1: City = this.parseCity(cityValue);
-        console.log('housingPhotosList', housingPhotosList);
         const housingPhotos: string[] = housingPhotosList.split(',').map((photo) => photo.trim());
-        console.log('housingPhotos', housingPhotos);
         const premium: boolean = isPremium.toLowerCase() === 'true';
         const favorite: boolean = isFavorite.toLowerCase() === 'true';
         return {
