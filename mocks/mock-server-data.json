@@ -1,0 +1,83 @@
+{
+  "api": {
+    "titles": [
+      "Luxury Apartment in Downtown",
+      "Cozy House with Garden",
+      "Modern Studio in the Heart of the City",
+      "Sunny Beachfront Villa",
+      "Quaint Countryside Cottage"
+    ],
+    "descriptions": [
+      "Spacious and modern apartment with breathtaking city views.",
+      "Charming house surrounded by a beautiful garden, perfect for a peaceful retreat.",
+      "Compact studio with contemporary design, close to all major attractions.",
+      "Enjoy the sun and sea in this beautiful beachfront villa with stunning views.",
+      "Escape to the countryside and experience the charm of this cozy cottage."
+    ],
+    "previewImages": [
+      "http://preview_image.jpg",
+      "http://preview_image2.jpg",
+      "http://preview_image3.jpg",
+      "http://preview_image4.jpg",
+      "http://preview_image5.jpg"
+    ],
+    "roomImages": [
+      "http://photo1.jpg",
+      "http://photo7.jpg",
+      "http://photo3.jpg",
+      "http://photo9.jpg",
+      "http://photo5.jpg"
+    ],
+    "users": [
+      "John Doe",
+      "Jane Doe",
+      "Alice Smith",
+      "Bob Johnson",
+      "Eva Brown"
+    ],
+    "emails": [
+      "john@example.com",
+      "jane@example.com",
+      "alice@example.com",
+      "bob@example.com",
+      "eva@example.com"
+    ],
+    "avatars": [
+      "http://avatar.jpg",
+      "http://avatar2.jpg",
+      "http://avatar3.jpg",
+      "http://avatar4.jpg",
+      "http://avatar5.jpg"
+    ],
+    "publicationDates": [
+      "2023-09-06T08:45:40.283Z",
+      "2023-09-06T09:15:20.123Z",
+      "2023-09-06T10:30:15.489Z",
+      "2023-09-07T12:45:30.762Z",
+      "2023-09-07T14:20:55.901Z"
+    ],
+    "cities": ["Paris", "Hamburg", "New York", "Malibu", "Cotswolds"],
+    "isPremium": [true, false, true, true, false],
+    "isFavorite": [false, true, false, true, true],
+    "ratings": [4.5, 4.2, 4.8, 4.9, 4.0],
+    "apartmentTypes": ["Apartment", "House", "Studio", "Villa", "Cottage"],
+    "roomAmounts": [3, 4, 1, 5, 2],
+    "guestAmounts": [6, 8, 2, 10, 4],
+    "rentalCosts": [250, 500, 120, 800, 150],
+    "facilities": [
+      ["Breakfast", "Air conditioning", "Laptop friendly workspace"],
+      ["Air conditioning", "Washer", "Towels", "Fridge"],
+      ["Wi-Fi", "Heating", "Kitchenette"],
+      ["Private beach", "Pool", "Garden"],
+      ["Fireplace", "Garden view", "Pet-friendly"]
+    ],
+    "commentsAmounts": [25, 15, 30, 10, 20],
+    "locations": [
+      { "latitude": 48.85661, "longitude": 2.351499 },
+      { "latitude": 53.550341, "longitude": 10.000654 },
+      { "latitude": 40.712776, "longitude": -74.005974 },
+      { "latitude": 34.025922, "longitude": -118.779757 },
+      { "latitude": 51.928002, "longitude": -1.425272 }
+    ]
+  }
+}
