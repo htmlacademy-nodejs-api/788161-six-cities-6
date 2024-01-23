@@ -2,7 +2,6 @@
 
 import { readdir } from 'node:fs/promises';
 import { CLIApplication } from './cli/cli-application.js';
-//import { HelpCommand, ImportCommand, VersionCommand } from './cli/index.js';
 import { resolve } from 'node:path';
 import { Command } from './cli/commands/command.interface.js';
 import chalk from 'chalk';

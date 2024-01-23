@@ -6,3 +6,4 @@ export * from './facilities.enum.js';
 export * from './offer.interface.js';
 export * from './user.enum.js';
 export * from './user.interface.js';
+export * from './mock-server-data.type.js';
