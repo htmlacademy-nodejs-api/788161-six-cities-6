@@ -5,7 +5,6 @@ import { OfferGenerator } from './offer-generator.interface.js';
 import { COMMENTS, GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, RATING, ROOMS, WEEK_DAY } from './offer-conditions.js';
 import { Facilities } from '../../models/facilities.enum.js';
 
-
 export class TSVOfferGenerator implements OfferGenerator { 
   constructor(private readonly mockData: MockServerData){}
 
@@ -23,7 +22,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       .toISOString();
 
     const city = getRandomItem<string>(this.mockData.cities);
-    //getRandomItem(Object.values(City));
     const isPremium = getRandomItem<boolean>([true, false]);
     const isFavorite = getRandomItem<boolean>([true, false]);
     const rating = generateRandomValue(RATING.MIN, RATING.MAX, 1);

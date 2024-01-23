@@ -24,3 +24,7 @@ export function generateRandomPassword(): string {
 
   return password;
 }
+
+export function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : '';
+}

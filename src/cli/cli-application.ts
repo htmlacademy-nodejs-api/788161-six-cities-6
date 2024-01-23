@@ -6,9 +6,6 @@ type CommandCollection = Record<string, Command>;
 export class CLIApplication {
   private commands: CommandCollection = {};
 
-  //   { "-- help" : HelpCommand }
-  //   { "-- version" : Version }
-
   constructor(
    private defaultCommand: string = '--help'
   ) {}
