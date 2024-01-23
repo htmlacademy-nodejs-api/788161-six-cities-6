@@ -5,7 +5,7 @@ import { OfferGenerator } from './offer-generator.interface.js';
 import { COMMENTS, GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, RATING, ROOMS, WEEK_DAY } from './offer-conditions.js';
 import { Facilities } from '../../models/facilities.enum.js';
 
-export class TSVOfferGenerator implements OfferGenerator { 
+export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData){}
 
   public generate(): string {
