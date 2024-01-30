@@ -36,8 +36,6 @@ export function createOffer(offerData: string): RentalOffer {
   const housingPhotos: string[] = housingPhotosList.split(',').map((photo) => photo.trim());
   const facilities: Facilities[] = parseFacilities(facilitiesStr);
 
-  const premium: boolean = isPremium.toLowerCase() === 'true';
-  const favorite: boolean = isFavorite.toLowerCase() === 'true';
   return {
     title,
     description,
@@ -45,8 +43,8 @@ export function createOffer(offerData: string): RentalOffer {
     city: City[cityValue as keyof typeof City],
     previewImage,
     housingPhotos,
-    premium : premium,
-    favorite: favorite,
+    premium :  Boolean(isPremium),
+    favorite: Boolean(isFavorite),
     rating: Number.parseFloat(rating),
     apartmentType: ApartmentType[apartmentType as keyof typeof ApartmentType],
     roomAmount:  Number.parseInt(roomAmount, 10),
