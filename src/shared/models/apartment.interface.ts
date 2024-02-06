@@ -3,4 +3,7 @@ export enum ApartmentType {
     House = 'House',
     Room = 'Room',
     Hotel = 'Hotel',
+    Studio = 'Studio',
+    Villa = 'Villa',
+    Cottage = 'Cottage'
 }

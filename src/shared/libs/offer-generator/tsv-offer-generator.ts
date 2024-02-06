@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
-import { generateRandomPassword, generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/common.js';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/common.js';
 import { MockServerData } from '../../models/mock-server-data.type.js';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { COMMENTS, GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, RATING, ROOMS, WEEK_DAY } from './offer-conditions.js';
 import { Facilities } from '../../models/facilities.enum.js';
+import { UserType } from '../../models/index.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData){}
@@ -15,6 +16,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const roomImages = getRandomItems<string>(this.mockData.roomImages).join(';');
     const user = getRandomItem(this.mockData.users);
     const email = getRandomItem(this.mockData.emails);
+    const userType = getRandomItem(Object.values(UserType));
     const avatar = getRandomItem(this.mockData.avatars);
 
     const createPostData = dayjs()
@@ -30,7 +32,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const guestAmount = generateRandomValue(GUESTS.MIN, GUESTS.MAX);
     const price = generateRandomValue(PRICE.MIN, PRICE.MAX);
     const facilities = getRandomItems(Object.values(Facilities));
-    const password = generateRandomPassword();
     const commentAmount = generateRandomValue(COMMENTS.MIN, COMMENTS.MAX);
     const location = [
       generateRandomValue(LATITUDE_RANGE.MIN, LATITUDE_RANGE.MAX, 6),
@@ -44,6 +45,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       roomImages,
       user,
       email,
+      userType,
       avatar,
       createPostData,
       city,
@@ -55,7 +57,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       guestAmount,
       price,
       facilities,
-      password,
       commentAmount,
       location,
     ].join('\t');
