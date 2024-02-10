@@ -1,0 +1,708 @@
+openapi: 3.1.0
+info:
+  title: API-server for Six Cities Project.
+  description: |-
+    List of resources and paths
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags: 
+  - name: offers
+    description: Actions with offers.
+  - name: users
+    description: Actions with users.
+  - name: comments
+    description: Actions with comments.
+paths:
+  /users/register:
+    post:
+      tags: 
+        -users
+      summary: User registration
+      description: Registers new users
+
+      requestBody:
+        description: Information for creating a new user
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses: 
+        "201":
+          description: User has been registered. User object
+          content: 
+             application/json:
+              schema:
+                 $ref: '#/components/schemas/user'
+        "409": 
+          description: A user with this email already exists
+
+  /users/login:
+      post:
+        tags:
+          - users
+        summary: User authorization
+        description: Authorizes an existing user based on login and password.
+        requestBody:
+          description: Credentials for user login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authorizedUser'
+          required: true
+        responses:
+          "200":
+            description: User logged in successfully. User token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token: 
+                      type: string
+          "401":
+            description: Unauthorized. Invalid credentials
+          "404":
+            description: User not found
+
+
+      get:
+        tags:
+          - users
+        summary: Checking user status
+        description: Returns authorized user's information.
+        responses:
+          '200':
+            description: User token is valid. User object.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/user'
+          '401':
+            description: Token is invalid.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: End of user session
+      description: Ends authorized user's session
+      responses:
+      '204':
+        description: Session is successfully ended.
+      '401':
+        description: User session token is invalid.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Get all offers
+      description: Retrieves a list of all offers
+      parameters:
+        - in: query
+          name: limit
+          description: Number of offers to retrieve
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of offers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerPreview'
+        "404":
+          description: No offers found
+
+    post:
+      tags:
+        - offers
+      summary: Offer creation
+      description: Creates a new offer.
+      requestBody:
+        description: Offer data to create a new offer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+      responses:
+        "201":
+          description: Offer created successfully. Offer object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "400":
+          description: Invalid offer data provided
+        "401":
+          description: Unauthorized. User not authorized to create offer
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Get detailed offer by ID
+      description: Retrieves the details of a specific offer by its ID
+      parameters:
+        - in: path
+          name: offerId
+          description: ID of the offer to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Offer details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "404":
+          description: Offer with the specified ID not found
+
+    patch:
+      tags:
+        - offers
+      summary: Update offer by ID
+      description: Updates the details of a specific offer by its ID
+      parameters:
+        - in: path
+          name: offerId
+          description: ID of the offer to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Offer data to update the offer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateOffer'
+        required: true
+      responses:
+        "200":
+          description: Offer details updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        "400":
+          description: Invalid offer data provided
+        "404":
+          description: Offer with the specified ID not found
+        '401':
+          description: User is not authorized
+
+    delete:
+      tags:
+        - offers
+      summary: Delete offer by ID
+      description: Deletes a specific offer by its ID
+      parameters:
+        - in: path
+          name: offerId
+          description: ID of the offer to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Offer deleted successfully
+        "401":
+          description: Unauthorized. Only authorized customers can delete offers.
+        "404":
+          description: Offer with the specified ID not found
+
+  /offers/{offerId}/comments:
+    get: 
+      tags: 
+        -comments
+      summary: Get comments for specific offer
+      description: Returns comments for offer
+      parameters:
+        - in: path
+          name: offerId
+          description: ID of the offer to retrieve comments for
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+        "404":
+          description: Offer with the specified ID not found or no comments found for the offer
+
+    post:
+      tags:
+        - comments
+      summary: Comment creation
+      description: Creates a new comment for a specific offer
+      parameters:
+        - in: path
+          name: offerId
+          description: ID of the offer to create a comment for
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Comment data to create a new comment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+      responses:
+        "201":
+          description: Comment created successfully. Comment object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        "400":
+          description: Invalid comment data provided
+        "404":
+          description: Offer with the specified ID not found
+
+  /offers/favorites:
+    get:
+      tags:
+        - offer
+      summary: Favorite offers
+      description: Returns list of favorite offers
+      responses: 
+         "200":
+            description: List of offers
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/offerPreview'
+         "401":
+          description: User is not authorized to view favorite offers.
+
+  
+  /offers{offerId}/favorite:
+    put:
+      tags:
+        -offers
+      summary: Favorite offer
+      description: Add or remove an offer from or to favorites list
+      parameters:
+        -in: path
+        -name: offerId
+        schema:
+          type: string
+          required: true
+          description: offer's id
+      requestBody:
+        content:
+          text/plain:
+            type: boolean
+      responses:
+        '204':
+          description: Offer's status has been updated
+        '401': User is not authorized 
+  
+  /offers/premium:
+    get:
+      tags:
+        - offer
+      summary: Premium offers
+      description: Returns list of premium offers
+      parameters:
+        - in: query
+          name: city
+          schema:
+            type: string
+            required: true
+            description: Premium offer for specific city.
+            example: Paris
+      responses: 
+         "200":
+            description: List of premium offers
+            content:
+              application/json:
+                schema:
+                  type: array
+                  maxItems: 3
+                  items:
+                    $ref: '#/components/schemas/offerPreview'
+         "401":
+          description: User is not authorized
+
+
+components:
+  schemas:
+    createUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+          required: true
+        name:
+          type: string
+          example: Keks
+          required: true
+        password:
+          type: string
+          example: 123456
+          required: true
+        userType: 
+          type: string
+          enum: 
+            - Ordinary
+            - Pro
+          required: true
+          example: Pro
+        avatar: 
+          type: string
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        name:
+          type: string
+          example: Keks
+        avatar: 
+          type: string
+        userType: 
+          type: string
+          enum: 
+            - Ordinary
+            - Pro
+      
+    authorizedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        login:
+          type: string
+          example: keks@htmlacademy.ru
+        password:
+          type: string
+          example: 123456
+ 
+    createOffer: 
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        city:
+          type: string
+          $ref: '#/components/schemas/city'
+          required: true
+        previewImage:
+          type: string
+          required: true
+        housingPhotos:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+        premium:
+          type: boolean
+          required: true
+        favorite:
+          type: boolean
+          required: true
+        apartmentType:
+          type: string
+          enum: 
+            - Apartment
+            - House
+            - Room
+            - Hotel
+            - Studio
+            - Villa
+            - Cottage
+          required: true
+        roomAmount:
+          type: integer
+          required: true
+        guestAmount:
+          type: integer
+          required: true
+        rentalCost:
+          type: number
+          required: true
+        facilities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - Air conditioning
+              - Laptop friendly workspace
+              - Baby seat
+              - Washer
+              - Towels
+              - Fridge
+          required: true
+        authorId:
+          type: string
+          required: true
+        location:
+          type: object
+          properties:
+            latitude: 
+              type: number
+            longitude:
+              type: number
+          required: true
+
+    updateOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        city:
+          type: string
+          $ref: '#/components/schemas/city'
+          required: true
+        previewImage:
+          type: string
+          required: true
+        housingPhotos:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+        premium:
+          type: boolean
+          required: true
+        favorite:
+          type: boolean
+          required: true
+        apartmentType:
+          type: string
+          enum: 
+            - Apartment
+            - House
+            - Room
+            - Hotel
+            - Studio
+            - Villa
+            - Cottage
+          required: true
+        roomAmount:
+          type: integer
+          required: true
+        guestAmount:
+          type: integer
+          required: true
+        rentalCost:
+          type: number
+          required: true
+        facilities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - Air conditioning
+              - Laptop friendly workspace
+              - Baby seat
+              - Washer
+              - Towels
+              - Fridge
+          required: true
+        authorId:
+          type: string
+          required: true
+        location:
+          type: object
+          properties:
+            latitude: 
+              type: number
+            longitude:
+              type: number
+          required: true
+
+    offer: 
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        publicationDate:
+          type: string
+          format: date-time
+        city:
+          type: string
+          $ref: '#/components/schemas/city'
+          required: true
+        previewImage:
+          type: string
+          required: true
+        housingPhotos:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+        premium:
+          type: boolean
+          required: true
+        favorite:
+          type: boolean
+          required: true
+        rating: 
+          type: number
+        apartmentType:
+          type: string
+          enum: 
+            - Apartment
+            - House
+            - Room
+            - Hotel
+            - Studio
+            - Villa
+            - Cottage
+          required: true
+        roomAmount:
+          type: integer
+          required: true
+        guestAmount:
+          type: integer
+          required: true
+        rentalCost:
+          type: number
+          required: true
+        facilities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - Air conditioning
+              - Laptop friendly workspace
+              - Baby seat
+              - Washer
+              - Towels
+              - Fridge
+          required: true
+        authorId:
+          type: string
+          required: true
+        commentsAmount:
+          type: integer
+        location:
+          type: object
+          properties:
+            latitude: 
+              type: number
+            longitude:
+              type: number
+          required: true
+
+    offerPreview:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+        publicationDate:
+          type: string
+          format: date-time
+        city:
+          type: string
+          $ref: '#/components/schemas/city'
+          required: true
+        previewImage:
+          type: string
+          required: true
+        premium:
+          type: boolean
+          required: true
+        favorite:
+          type: boolean
+          required: true
+        rating: 
+          type: number
+        apartmentType:
+          type: string
+          enum: 
+            - Apartment
+            - House
+            - Room
+            - Hotel
+            - Studio
+            - Villa
+            - Cottage
+          required: true
+        rentalCost:
+          type: number
+          required: true
+        commentsAmount:
+          type: integer
+
+
+    createComment:
+      type: object
+      properties:
+        text:
+          type: string
+          required: true
+        rating:
+          type: number
+          required: true
+        author:
+          $ref: '#/components/schemas/user'
+
+    comment:
+      type: object
+      properties:
+        text:
+          type: string
+        date:
+          type: string
+          format: date-time
+        rating:
+          type: number
+        author:
+          $ref: '#/components/schemas/user'
+    city:
+          type: string
+          enum:
+            - Paris
+            - Cologne
+            - Brussels
+            - Amsterdam
+            - Hamburg
+            - Dusseldorf
