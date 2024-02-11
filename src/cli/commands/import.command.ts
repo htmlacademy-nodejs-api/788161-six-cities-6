@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { TSVFileReader } from '../../shared/libs/file-reader/tsv-file-reader.js';
 import { Command } from './command.interface.js';
 import { createOffer } from '../../shared/helpers/offer.js';
 import { getErrorMessage } from '../../shared/helpers/common.js';
@@ -11,6 +10,7 @@ import { ConsoleLogger } from '../../shared/libs/logger/console.logger.js';
 import { RentalOffer } from '../../shared/models/offer.interface.js';
 import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from './command.constant.js';
 import { getMongoURI } from '../../shared/helpers/database.js';
+import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 
 export class ImportCommand implements Command {
   private userService: UserService;
@@ -35,7 +35,6 @@ export class ImportCommand implements Command {
 
   private async onImportedLine(line: string, resolve: () => void) {
     const offer = createOffer(line);
-    // console.log(chalk.yellow(JSON. stringify(offer), '\n'));
     await this.saveOffer(offer);
     resolve();
   }
@@ -51,7 +50,7 @@ export class ImportCommand implements Command {
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
 
-    await this.offerService.create({
+    await this.offerService.createOffer({
       authorId: user.id,
       title: offer.title,
       description: offer.description,
@@ -60,14 +59,11 @@ export class ImportCommand implements Command {
       previewImage: offer.previewImage,
       housingPhotos: offer.housingPhotos,
       premium: offer.premium,
-      favorite: offer.favorite,
-      rating: offer.rating,
       apartmentType: offer.apartmentType,
       roomAmount: offer.roomAmount,
       guestAmount: offer.guestAmount,
       rentalCost: offer.rentalCost,
       facilities: offer.facilities,
-      commentsAmount: offer.commentsAmount,
       location: offer.location,
     });
   }
