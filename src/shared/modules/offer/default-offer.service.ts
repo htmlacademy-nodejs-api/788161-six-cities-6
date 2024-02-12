@@ -13,6 +13,7 @@ export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(Component.UserModel) private readonly userModel: types.ModelType<OfferEntity>,
   ){}
 
 
@@ -31,26 +32,22 @@ export class DefaultOfferService implements OfferService {
     {
       $lookup: {
         from: 'comments',
-        let: { offerId: '$_id' },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $eq: ['$offerId', '$$offerId']
-              }
-            }
-          },
-        ],
+        localField: 'authorId',
+        foreignField: 'authorId',
         as: 'comments'
       }
-    },
-    {
+    }, {
       $addFields: {
-        totalComments: { $size: '$comments' },
-        averageRating: { $avg: '$comments.rating' }
+        totalComments: {
+          $size: '$comments'
+        },
+        averageRating: {
+          $avg: '$comments.rating'
+        }
       }
-    },
-    { $unset: ['comments'] }
+    }, {
+      $unset: 'comments'
+    }
   ];
 
   // создание нового
@@ -120,25 +117,39 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async getAllFavoriteOffersByUser(userId: string): Promise<DocumentType<OfferEntity>[]> {
-    const favoriteOffers = await this.offerModel.aggregate([
+    const favoriteOffers = await this.userModel.aggregate([
       {
+        $match: { _id: new mongoose.Types.ObjectId(userId) }
+      },
+      {
+        $project: {
+          _id: 1,
+          favorites: {
+            $map: {
+              input: '$favorites',
+              as: 'fav',
+              in: {
+                $toObjectId: '$$fav'
+              }
+            }
+          }
+        }
+      }, {
         $lookup: {
-          from: 'users',
-          localField: '_id', // Field in the offers collection
-          foreignField: 'favorites', // Field in the users collection
-          as: 'userFavorites' // Field name for the joined documents
+          from: 'offers',
+          localField: 'favorites',
+          foreignField: '_id',
+          as: 'favoriteOffers'
         }
-      },
-      {
-        $unwind: '$userFavorites' // Unwind the userFavorites array
-      },
-      {
-        $match: {
-          'userFavorites._id': new mongoose.Types.ObjectId(userId) // Match the user's id
+      }, {
+        $unwind: {
+          path: '$favoriteOffers'
         }
-      },
-      ...this.commentLookupPipeline,
-      { $sort: { publicationDate: SortOrder.Desc } }
+      }, {
+        $unset: [
+          'favorites', '_id'
+        ]
+      }
     ]).exec();
     return favoriteOffers;
   }
