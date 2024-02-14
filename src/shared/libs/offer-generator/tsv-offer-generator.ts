@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/common.js';
 import { MockServerData } from '../../models/mock-server-data.type.js';
 import { OfferGenerator } from './offer-generator.interface.js';
-import { COMMENTS, GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, RATING, ROOMS, WEEK_DAY } from './offer-conditions.js';
+import { GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, ROOMS, WEEK_DAY } from './offer-conditions.js';
 import { Facilities } from '../../models/facilities.enum.js';
 import { UserType } from '../../models/index.js';
 
@@ -25,14 +25,11 @@ export class TSVOfferGenerator implements OfferGenerator {
 
     const city = getRandomItem<string>(this.mockData.cities);
     const isPremium = getRandomItem<boolean>([true, false]);
-    const isFavorite = getRandomItem<boolean>([true, false]);
-    const rating = generateRandomValue(RATING.MIN, RATING.MAX, 1);
     const apartmentType = getRandomItem<string>(this.mockData.apartmentTypes);
     const roomAmount = generateRandomValue(ROOMS.MIN, ROOMS.MAX);
     const guestAmount = generateRandomValue(GUESTS.MIN, GUESTS.MAX);
     const price = generateRandomValue(PRICE.MIN, PRICE.MAX);
     const facilities = getRandomItems(Object.values(Facilities));
-    const commentAmount = generateRandomValue(COMMENTS.MIN, COMMENTS.MAX);
     const location = [
       generateRandomValue(LATITUDE_RANGE.MIN, LATITUDE_RANGE.MAX, 6),
       generateRandomValue(LONGITUDE_RANGE.MIN, LONGITUDE_RANGE.MAX, 6),
@@ -50,14 +47,11 @@ export class TSVOfferGenerator implements OfferGenerator {
       createPostData,
       city,
       isPremium,
-      isFavorite,
-      rating,
       apartmentType,
       roomAmount,
       guestAmount,
       price,
       facilities,
-      commentAmount,
       location,
     ].join('\t');
   }

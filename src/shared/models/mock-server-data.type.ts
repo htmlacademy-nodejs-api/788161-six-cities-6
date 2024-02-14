@@ -8,14 +8,11 @@ export type MockServerData = {
   avatars: string[];
   publicationDates: string[];
   cities: string[];
-  isPremium: boolean[];
-  isFavorite: boolean[];
   ratings: number[];
   apartmentTypes: string[];
   roomAmounts: number[];
   guestAmounts: number[];
   rentalCosts: number[];
   facilities: string[][];
-  commentsAmounts: number[];
   locations: { latitude: number; longitude: number }[];
 };

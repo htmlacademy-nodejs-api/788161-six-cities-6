@@ -26,14 +26,11 @@ export function createOffer(offerData: string): RentalOffer {
     publicationDate,
     cityValue,
     isPremium,
-    isFavorite,
-    rating,
     apartmentType,
     roomAmount,
     guestAmount,
     rentalCost,
     facilitiesArray,
-    commentsAmount,
     location
   ] = offerData.replace('\n', '').split('\t');
   const housingPhotos: string[] = housingPhotosList.split(',').map((photo) => photo.trim());
@@ -54,14 +51,11 @@ export function createOffer(offerData: string): RentalOffer {
     publicationDate: new Date(publicationDate),
     city: City[cityValue as keyof typeof City],
     premium :  Boolean(isPremium),
-    favorite: Boolean(isFavorite),
-    rating: Number.parseFloat(rating),
     apartmentType: ApartmentType[apartmentType as keyof typeof ApartmentType],
     roomAmount:  Number.parseInt(roomAmount, 10),
     guestAmount: Number.parseInt(guestAmount, 10),
     rentalCost: Number.parseInt(rentalCost, 10),
     facilities,
-    commentsAmount: Number.parseInt(commentsAmount, 10),
     location: parseLocation(location)
   };
 }

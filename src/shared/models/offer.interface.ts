@@ -12,14 +12,14 @@ export interface RentalOffer {
     previewImage: string;
     housingPhotos: string[];
     premium: boolean;
-    favorite: boolean;
-    rating: number;
+    favorite?: boolean;
+    rating?: number;
     apartmentType: ApartmentType;
     roomAmount: number;
     guestAmount: number;
     rentalCost: number;
     facilities: Facilities[];
     author: User;
-    commentsAmount: number;
+    commentsAmount?: number;
     location: Coordinates;
 }
