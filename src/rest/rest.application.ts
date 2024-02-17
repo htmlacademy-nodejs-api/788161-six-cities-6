@@ -5,6 +5,7 @@ import { inject, injectable } from 'inversify';
 import { Component } from '../shared/models/component.enum.js';
 import { DatabaseClient } from '../shared/libs/database-client/database-client.interface.js';
 import { getMongoURI } from '../shared/helpers/index.js';
+import { ExceptionFilter } from '../shared/libs/rest/index.js';
 
 @injectable()
 export class RestApplication {
@@ -13,13 +14,13 @@ export class RestApplication {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
+    @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
   }
 
   private async _initServer() {
     const port = this.config.get('PORT');
-    console.log('PORT', port)
     this.server.listen(port);
   }
 
@@ -34,12 +35,29 @@ export class RestApplication {
     return this.databaseClient.connect(mongoUri);
   }
 
+  private async _initMiddleware() {
+    this.server.use(express.json());
+  }
+
+  private async _initExceptionFilters() {
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
+  }
+
   public async init() {
     this.logger.info('Application initialization');
 
     this.logger.info('Init database...');
     await this._initDb();
     this.logger.info('Init database completed');
+
+    this.logger.info('Init app-level middleware');
+    await this._initMiddleware();
+    this.logger.info('App-level middleware initialization completed');
+
+
+    this.logger.info('Init exception filters');
+    await this._initExceptionFilters();
+    this.logger.info('Exception filters initialization compleated');
 
     this.logger.info('Try to init server...');
     await this._initServer();
