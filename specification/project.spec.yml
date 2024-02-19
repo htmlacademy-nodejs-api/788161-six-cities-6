@@ -671,6 +671,8 @@ components:
           required: true
         commentsAmount:
           type: integer
+        location:
+          $ref: '#/components/schemas/location'
 
 
     createComment:
@@ -706,3 +708,14 @@ components:
             - Amsterdam
             - Hamburg
             - Dusseldorf
+    location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+              example: 48.85661
+            longitude:
+              type: number
+              format: float
+              example: 2.351499
