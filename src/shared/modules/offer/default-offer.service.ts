@@ -23,7 +23,7 @@ export class DefaultOfferService implements OfferService {
         from: 'users',
         localField: 'authorId',
         foreignField: '_id',
-        as: 'author'
+        as: 'author' //authorId
       }
     }
   ];
