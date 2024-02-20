@@ -4,6 +4,7 @@ import { CommentEntity, CommentModel } from './comment.entity.js';
 import { types } from '@typegoose/typegoose';
 import { CommentService, DefaultCommentService } from './index.js';
 import { Controller } from '../../libs/rest/index.js';
+import CommentController from './comment.controller.js';
 
 
 export function createCommentContainer() {

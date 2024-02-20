@@ -1,6 +1,6 @@
 
 # Получить объявление по идентификатору
-GET http://localhost:5000/offers/62711a50b0e24a624d49ffdc HTTP/1.1
+GET http://localhost:5000/offers/65c887cd45379eb06d07c91d HTTP/1.1
 
 ###
 
@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ## Удалить объявление по идентификатору
 
-DELETE http://localhost:5000/offers/62825028a75295825778ac80 HTTP/1.1
+DELETE http://localhost:5000/offers/65c8861023a0c61f6ff3d23b HTTP/1.1
 
 ###
 
@@ -40,5 +40,10 @@ Content-Type: application/json
   "description": "Проверка обновления",
   "price": 1100
 }
+
+###
+
+## Список комментариев к объявлению 
+GET http://localhost:5000/offers/65c887cd45379eb06d07c929/comments HTTP/1.1
 
 ###

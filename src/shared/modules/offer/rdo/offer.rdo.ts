@@ -52,7 +52,7 @@ export class OfferRdo {
   public location: Coordinates;
 
   @Expose()
-  public commentAmount: number;
+  public totalComments: number;
 
   @Expose({ name: 'author'}) //authorId
   @Type(() => UserRdo)

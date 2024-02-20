@@ -1,6 +1,6 @@
 
 import { Request } from 'express';
-import { RequestBody } from '../../libs/rest/index.js'; //RequestParams
+import { RequestBody } from '../../libs/rest/index.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
 

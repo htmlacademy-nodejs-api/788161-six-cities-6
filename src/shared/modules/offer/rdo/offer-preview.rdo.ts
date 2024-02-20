@@ -22,7 +22,7 @@ export class OfferPreviewRdo {
   public location: Coordinates;
 
   @Expose()
-  public imagePreview: string;
+  public previewImage: string;
 
   @Expose()
   public isPremium: boolean;
@@ -37,5 +37,5 @@ export class OfferPreviewRdo {
   public rentalCost: number;
 
   @Expose()
-  public commentAmount: number;
+  public totalComments: number;
 }

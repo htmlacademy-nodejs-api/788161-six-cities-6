@@ -74,9 +74,6 @@ export class RestApplication {
     await this._initServer();
     this.logger.info(`🚀 Server started on http://localhost:${this.config.get('PORT')}`);
 
-    this.server.get('/', (_req, res) => {
-      res.send('Hello');
-    });
 
   }
 }
