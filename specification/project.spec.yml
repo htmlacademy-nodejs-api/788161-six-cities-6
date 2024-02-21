@@ -96,6 +96,18 @@ paths:
       '401':
         description: User session token is invalid.
 
+  /users/{userId}/avatar:
+    post:
+      tags:
+        -users
+      summary: Upload avatar
+      description: Upload user's avatar
+      responses:
+        '201':
+          description: image has been uploaded
+        '401':
+          description: User not authorized
+
   /offers:
     get:
       tags:
