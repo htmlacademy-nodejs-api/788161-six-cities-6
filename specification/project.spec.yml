@@ -245,37 +245,6 @@ paths:
         "404":
           description: Offer with the specified ID not found or no comments found for the offer
 
-    post:
-      tags:
-        - comments
-      summary: Comment creation
-      description: Creates a new comment for a specific offer
-      parameters:
-        - in: path
-          name: offerId
-          description: ID of the offer to create a comment for
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Comment data to create a new comment
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/createComment'
-        required: true
-      responses:
-        "201":
-          description: Comment created successfully. Comment object
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/comment'
-        "400":
-          description: Invalid comment data provided
-        "404":
-          description: Offer with the specified ID not found
-
   /offers/favorites:
     get:
       tags:
@@ -344,6 +313,28 @@ paths:
          "401":
           description: User is not authorized
 
+  /comments:
+    post:
+      tags: 
+        - comments
+      summary: Comment creation
+      description: Add comment to offer
+      requestBody:
+        description: Info to create a new comment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+      responses:
+        '201':
+          description: Comment has been created. Comment object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        '401':
+          description: User is not authorized to add comments
 
 components:
   schemas:

@@ -1,8 +1,10 @@
 import { Expose, Type } from 'class-transformer';
-import { ApartmentType, Coordinates, Facilities } from '../../../models/index.js';
+import { ApartmentType, City, Coordinates, Facilities } from '../../../models/index.js';
 import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class OfferRdo {
+  @Expose()
+  public id: string;
 
   @Expose()
   public title: string;
@@ -14,7 +16,7 @@ export class OfferRdo {
   public publicationDate: string;
 
   @Expose()
-  public city: string;
+  public city: City;
 
   @Expose()
   public previewImage: string;
@@ -50,9 +52,9 @@ export class OfferRdo {
   public location: Coordinates;
 
   @Expose()
-  public commentAmount: number;
+  public totalComments: number;
 
-  @Expose()
+  @Expose({ name: 'author'}) //authorId
   @Type(() => UserRdo)
-  public user: UserRdo;
+  public author: UserRdo;
 }

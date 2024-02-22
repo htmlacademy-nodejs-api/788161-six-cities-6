@@ -1,0 +1,49 @@
+
+# Получить объявление по идентификатору
+GET http://localhost:5000/offers/65c887cd45379eb06d07c91d HTTP/1.1
+
+###
+
+## Получить список объявлений
+GET http://localhost:5000/offers HTTP/1.1
+
+###
+
+POST http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Билли Саммерс",
+  "description": "Новый детективный роман от короля ужасов.",
+  "postDate": "2022-05-12T11:56:37.573Z",
+  "image": "billy-summers.png",
+  "type": "Sell",
+  "price": 1408,
+  "userId": "62823cb2c5a64ce9f1b50ec8"
+}
+
+###
+
+## Удалить объявление по идентификатору
+
+DELETE http://localhost:5000/offers/65c8861023a0c61f6ff3d23b HTTP/1.1
+
+###
+
+## Обновить объявление
+
+PATCH http://localhost:4000/offers/652e71c6d9f30c786a73f139 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Ночной дозор 3",
+  "description": "Проверка обновления",
+  "price": 1100
+}
+
+###
+
+## Список комментариев к объявлению 
+GET http://localhost:5000/offers/65c887cd45379eb06d07c929/comments HTTP/1.1
+
+###

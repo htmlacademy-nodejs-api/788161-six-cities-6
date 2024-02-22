@@ -1,93 +1,167 @@
 import { inject, injectable } from 'inversify';
-import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
+import {
+  BaseController,
+  HttpError,
+  HttpMethod,
+  ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware
+} from '../../libs/rest/index.js';
 import { Component } from '../../models/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { Request, Response } from 'express';
-import { DEFAULT_OFFER_AMOUNT } from './offer.constant.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { fillDTO } from '../../helpers/common.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { UpdateOfferRequest } from './update-offer-request.type.js';
 import { StatusCodes } from 'http-status-codes';
+import { ParamOfferId } from './type/param-offerid.type.js';
+import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
+import { CommentService } from '../comment/comment-service.interface.js';
+import { CommentRdo } from '../comment/index.js';
+import { CreateOfferDto, UpdateOfferDto } from './index.js';
 
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.OfferService) private readonly offerService: OfferService
+    @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.CommentService) private readonly commentService: CommentService
   ) {
     super(logger);
     this.logger.info('Refister routes for OfferController...');
 
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Patch, handler: this.update }); //Update offer by ID
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete }); //Delete offer by ID
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.getDetailedInfo }); //Get detailed offer by ID
-    // TO DO:
-    // this.addRoute({ path: '/premium', method: HttpMethod.Get, handler: this.getPremiumOffers });
-    // this.addRoute({ path: '/favorites', method: HttpMethod.Get, handler: this.getFavoritesOffers });
-    // this.addRoute({ path: '/:offerId/favorite', method: HttpMethod.Put, handler: this.addOrRemoveFavorites }); //Add or remove an offer from or to favorites list
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Patch,
+      handler: this.update,
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(UpdateOfferDto),
+      ]
+    });
+
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Get,
+      handler: this.show,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+
+    this.addRoute({
+      path: '/:offerId/comments',
+      method: HttpMethod.Get,
+      handler: this.getComments,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+
+    this.addRoute({
+      path: '/premium',
+      method: HttpMethod.Get,
+      handler: this.getPremiumOffers
+    });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavoritesOffers
+    });
+
+    this.addRoute({
+      path: '/:offerId/favorite',
+      method: HttpMethod.Put,
+      handler: this.favorite,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
 
   }
 
-  private parseToString(data: unknown): string | null {
-    return typeof data === 'string' ? data : null;
+  public async getFavoritesOffers(): Promise<void> {
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'OfferController');
   }
+
+  public favorite(_req: Request, _res: Response): Promise<void> {
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'OfferController');
+  }
+
+  public async getPremiumOffers({ query }: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.getPremiumOffersByCity(query.city as string, DEFAULT_OFFER_PREMIUM_COUNT);
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
+  }
+
 
   // TODO: получить идентификатор пользователя и взять favorite из favoredByUsers
+  // TO DO добавить лимиты
   public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.getAllOffers(DEFAULT_OFFER_AMOUNT);
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
+
   public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
-    const offer = await this.offerService.createOffer(body);
+    const result = await this.offerService.createOffer(body);
+    const offer = await this.offerService.findOfferById(result.id);
     this.created(res, fillDTO(OfferRdo, offer));
   }
 
-  public async update({ body, params }: UpdateOfferRequest, res: Response): Promise<void> {
-    const offerId = this.parseToString(params.offerId);
-    if (!offerId) {
-      throw new HttpError(StatusCodes.BAD_REQUEST, `${params.offerId} is not valid`, 'OfferController');
-    }
-    const existingOffer = await this.offerService.exists(offerId);
+  public async update({ params, body }: UpdateOfferRequest, res: Response): Promise<void> {
+    await this.offerService.updateOffer(params.offerId, body);
+    const updatedOffer = await this.offerService.findOfferById(params.offerId);
 
-    if (!existingOffer) {
-      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${offerId} does not exist`, 'OfferController');
+    if (!updatedOffer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${params.offerId} not found.`,
+        'OfferController'
+      );
     }
-    const offer = await this.offerService.updateOffer(offerId, body);
-    this.ok(res, fillDTO(OfferRdo, offer));
+
+    this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
-  public async delete({ params }: Request, res: Response): Promise<void> {
-    const offerId = this.parseToString(params.offerId);
-
-    if (!offerId) {
-      throw new HttpError(StatusCodes.BAD_REQUEST, `${params.offerId} is not valid`, 'OfferController');
-    }
-
-    const existingOffer = await this.offerService.exists(offerId);
-
-    if (!existingOffer) {
-      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${offerId} does not exist`, 'OfferController');
-    }
-
+  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
     await this.offerService.deleteOfferById(offerId);
+    await this.commentService.deleteCommentByOfferId(offerId);
     this.noContent(res, null);
   }
 
-  public async getDetailedInfo({ params }: Request, res: Response): Promise<void> {
-    const existsOffer = await this.offerService.findOfferById(params.id);
-
-    if (!existsOffer) {
-      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with the ID:«${params.id}» does not exist.`, 'OfferController');
+  public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    if (!await this.offerService.exists(params.offerId)) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${params.offerId} not found.`,
+        'OfferController'
+      );
     }
 
-    this.ok(res, fillDTO(OfferRdo, existsOffer));
+    const comments = await this.commentService.findCommentByOfferId(params.offerId);
+    this.ok(res, fillDTO(CommentRdo, comments));
   }
 
+  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const offer = await this.offerService.findOfferById(offerId);
+
+    if (!offer) {
+      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with the ID:«${offerId}» does not exist.`, 'OfferController');
+    }
+
+    this.ok(res, fillDTO(OfferRdo, offer));
+  }
 }
