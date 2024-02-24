@@ -96,7 +96,7 @@ paths:
       '401':
         description: User session token is invalid.
 
-  /users/{userId}/avatar:
+  /users/avatar:
     post:
       tags:
         -users

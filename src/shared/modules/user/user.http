@@ -6,10 +6,10 @@ Content-Type: application/json
 
 {
   "email": "torans@overlook.net",
-  "avatarPath": "torrance.png",
-  "firstname": "Jack",
-  "lastname": "Torrance",
-  "password": "shining"
+  "avatar": "avatar.png",
+  "name": "Jack",
+  "password": "shining",
+  "userType": "Ordinary"
 }
 
 ###
@@ -40,3 +40,11 @@ Content-Type: image/png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ##
+
+###
+## Проверить токен пользователя
+
+GET http://localhost:5000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
+
+###

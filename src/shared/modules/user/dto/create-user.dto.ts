@@ -17,6 +17,6 @@ export class CreateUserDto {
   @Length(6, 12, { message: CreateUserMessages.password.lengthField })
   public password: string;
 
-  @IsEnum(UserType, { message: CreateUserMessages.type.invalidFormat })
+  @IsEnum(UserType, { message: CreateUserMessages.userType.invalidFormat })
   public userType: UserType;
 }
