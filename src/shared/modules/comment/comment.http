@@ -1,14 +1,14 @@
 # Комментарии
-## Создать комментарий
+## Создать комментарий РАБОТАЕТ
 
 POST http://localhost:5000/comments HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 Content-Type: application/json
 
 {
-  "text": "Как обстоят дела с коробками? Фирменная упаковка сохранена?",
-  "offerId": "65c887cd45379eb06d07c929",
-  "authorId": "65c15a57510a281b05318190",
-  "rating": 5
+  "text": "Комментарий к предложению",
+  "offerId": "65db15b81abcb6791779a1ee",
+  "rating": 4
 }
 
 ###

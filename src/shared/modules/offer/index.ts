@@ -8,3 +8,6 @@ export * from './offer.controller.js';
 export * from './rdo/offer.rdo.js';
 export * from './dto/create-offer.messages.js';
 export * from './dto/update-offer.messages.js';
+export * from './dto/favorite-offer.messages.js';
+
+

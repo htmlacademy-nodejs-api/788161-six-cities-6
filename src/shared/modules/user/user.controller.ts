@@ -37,20 +37,18 @@ export class UserController extends BaseController {
       path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+      middlewares: [
+        new ValidateDtoMiddleware(CreateUserDto)
+      ]
     });
 
     this.addRoute({
       path: '/login',
       method: HttpMethod.Post,
       handler: this.login,
-      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
-    });
-
-    this.addRoute({
-      path: '/logout',
-      method: HttpMethod.Post,
-      handler: this.logout
+      middlewares: [
+        new ValidateDtoMiddleware(LoginUserDto)
+      ]
     });
 
     this.addRoute({
@@ -113,10 +111,6 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
-  }
-
-  public async logout(): Promise<void> {
-    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
   }
 }
 

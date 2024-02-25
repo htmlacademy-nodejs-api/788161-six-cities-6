@@ -282,21 +282,17 @@ paths:
         -offers
       summary: Favorite offer
       description: Add or remove an offer from or to favorites list
-      parameters:
-        -in: path
-        -name: offerId
-        schema:
-          type: string
-          required: true
-          description: offer's id
       requestBody:
+        description: Mark offer as favorite
         content:
-          text/plain:
-            type: boolean
+          application/json:
+            schema:
+              $ref: '#/components/schemas/favoriteOffer'
       responses:
         '204':
           description: Offer's status has been updated
-        '401': User is not authorized 
+        '401':
+          description: User is not authorized 
   
   /offers/premium:
     get:
@@ -433,7 +429,7 @@ components:
         premium:
           type: boolean
           required: true
-        favorite:
+        favorites:
           type: boolean
           required: true
         apartmentType:
@@ -506,7 +502,7 @@ components:
         premium:
           type: boolean
           required: true
-        favorite:
+        favorites:
           type: boolean
           required: true
         apartmentType:
@@ -582,7 +578,7 @@ components:
         premium:
           type: boolean
           required: true
-        favorite:
+        favorites:
           type: boolean
           required: true
         rating: 
@@ -637,6 +633,9 @@ components:
     offerPreview:
       type: object
       properties:
+        id:
+          type: string
+          example: 668a94df4ab1045f6425ea
         title:
           type: string
           required: true
@@ -653,7 +652,7 @@ components:
         premium:
           type: boolean
           required: true
-        favorite:
+        favorites:
           type: boolean
           required: true
         rating: 
@@ -702,15 +701,11 @@ components:
           type: number
         author:
           $ref: '#/components/schemas/user'
+
     city:
           type: string
-          enum:
-            - Paris
-            - Cologne
-            - Brussels
-            - Amsterdam
-            - Hamburg
-            - Dusseldorf
+          example: Amsterdam
+
     location:
           type: object
           properties:
@@ -722,3 +717,11 @@ components:
               type: number
               format: float
               example: 2.351499
+    
+    favoriteOffer:
+      type: object
+      properties:
+        isFavorite:
+          type: boolean
+          required: true
+          example: true

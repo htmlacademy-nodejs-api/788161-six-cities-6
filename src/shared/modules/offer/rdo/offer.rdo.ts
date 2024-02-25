@@ -28,7 +28,7 @@ export class OfferRdo {
   public premium: boolean;
 
   @Expose()
-  public favorite: boolean;
+  public favorites: boolean;
 
   @Expose()
   public rating: number;

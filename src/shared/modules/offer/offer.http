@@ -1,49 +1,87 @@
 
-# Получить объявление по идентификатору
-GET http://localhost:5000/offers/65c887cd45379eb06d07c91d HTTP/1.1
+# Получить детальную инфу для объявления по идентификатору РАБОТАЕТ TO DO: список полей + рейтинг + избранное
+GET http://localhost:5000/offers/65db15b81abcb6791779a1ee HTTP/1.1
 
 ###
 
-## Получить список объявлений
+## Получить список объявлений РАБОТАЕТ, TO DO: список полей
 GET http://localhost:5000/offers HTTP/1.1
 
 ###
 
+## создать объявление РАБОТАЕТ
 POST http://localhost:5000/offers HTTP/1.1
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 Content-Type: application/json
 
 {
-  "title": "Билли Саммерс",
-  "description": "Новый детективный роман от короля ужасов.",
-  "postDate": "2022-05-12T11:56:37.573Z",
-  "image": "billy-summers.png",
-  "type": "Sell",
-  "price": 1408,
-  "userId": "62823cb2c5a64ce9f1b50ec8"
+  "title": "Modern villa in near see for Mary",
+  "description": "Large villa near see. Mountin view",
+  "publicationDate": "2023-09-06T08:45:40.283Z",
+  "city": "Paris",
+  "previewImage":  "http://preview_image.jpg",
+  "housingPhotos": [
+      "http://photo1.jpg",
+      "http://photo1.jpg",
+      "http://photo1.jpg",
+      "http://photo1.jpg",
+      "http://photo1.jpg",
+      "http://photo1.jpg"
+  ],
+  "premium": false,
+  "apartmentType": "Villa",
+  "roomAmount": 4,
+  "guestAmount": 2,
+  "rentalCost": 1000,
+  "facilities": ["Washer"],
+  "authorId": "65d9c585ce3dbe7f17ad61c2",
+  "location": {
+    "latitude": 49.657097,
+    "longitude": 8.048281
+  }
 }
 
 ###
 
-## Удалить объявление по идентификатору
+## Удалить объявление по идентификатору РАБОТАЕТ
 
-DELETE http://localhost:5000/offers/65c8861023a0c61f6ff3d23b HTTP/1.1
+DELETE http://localhost:5000/offers/65db15671abcb6791779a1e8 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 
 ###
 
-## Обновить объявление
+## Редактировать объявление  РАБОТАЕТ TO DO добавить избранное + поле рейтинг
 
-PATCH http://localhost:4000/offers/652e71c6d9f30c786a73f139 HTTP/1.1
+PATCH http://localhost:5000/offers/65db15b81abcb6791779a1ee HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 Content-Type: application/json
 
 {
-  "title": "Ночной дозор 3",
-  "description": "Проверка обновления",
-  "price": 1100
+  "title": "Modern villa in near see for Mary. Updated again",
+  "rentalCost": 1100
 }
 
 ###
 
-## Список комментариев к объявлению 
-GET http://localhost:5000/offers/65c887cd45379eb06d07c929/comments HTTP/1.1
+## Список комментариев к объявлению РАБОТАЕТ
+GET http://localhost:5000/offers/65db15b81abcb6791779a1ee/comments HTTP/1.1
 
 ###
+
+## Список избранных РАБОТАЕТ
+
+GET http://localhost:5000/offers/favorites
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+###
+
+## Список премиальных  РАБОТАЕТ
+GET http://localhost:5000/offers/premium?city=Paris
+
+###
+
+## Добавление/удаление предложения в/из избранное. НЕ РАБОТАЕТ
+
+PUT http://localhost:5000/offers/65db15b81abcb6791779a1ee/favorite
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0

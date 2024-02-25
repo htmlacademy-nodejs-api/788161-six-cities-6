@@ -2,18 +2,19 @@ import { inject, injectable } from 'inversify';
 import { OfferService } from './offer-service.interface.js';
 import { Component } from '../../models/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
-import { DocumentType, mongoose, types } from '@typegoose/typegoose';
+import { DocumentType, types } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto, UpdateOfferDto } from './index.js';
 import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
 import { SortOrder } from '../../models/sort-type.enum.js';
+import { defaultPipeline, getUserPipeline } from './offer.aggregation.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
-    @inject(Component.UserModel) private readonly userModel: types.ModelType<OfferEntity>,
+    // @inject(Component.UserModel) private readonly userModel: types.ModelType<OfferEntity>,
   ){}
 
 
@@ -42,7 +43,11 @@ export class DefaultOfferService implements OfferService {
           $size: '$comments'
         },
         averageRating: {
-          $avg: '$comments.rating'
+          $cond: {
+            if: { $eq: [{ $size: '$comments' }, 0] },
+            then: 0,
+            else: { $avg: '$comments.rating' }
+          }
         }
       }
     }, {
@@ -50,17 +55,19 @@ export class DefaultOfferService implements OfferService {
     }
   ];
 
+
   // создание нового
   public async createOffer(dto: CreateOfferDto): Promise<types.DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
+    const offer = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.title}.`);
 
-    return result;
+    return offer;
   }
 
   // получение инфы об одном
   // TO DO добавить избранное
-  public async findOfferById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findOfferById(userId: string | undefined, offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    console.log('userId', userId); // TO DO прокинуть юзера чтобы получить избраннные
     return this.offerModel.aggregate([
       {
         $match: {
@@ -83,14 +90,20 @@ export class DefaultOfferService implements OfferService {
 
   // список всех офферов
   // TO DO добавить избранное
-  public async getAllOffers(limit = DEFAULT_OFFER_AMOUNT, sortOrder: { [key: string]: SortOrder } = { publicationDate: SortOrder.Desc }): Promise<DocumentType<OfferEntity>[]> {
+  public async getAllOffers(
+    userId: string | undefined,
+    limit = DEFAULT_OFFER_AMOUNT,
+    sortOrder: { [key: string]: SortOrder } = { publicationDate: SortOrder.Desc }
+  ): Promise<DocumentType<OfferEntity>[]> {
+    console.log(userId);
     return this.offerModel
       .aggregate([
         ...this.userLookupPipeline,
         ...this.commentLookupPipeline,
         { $limit: limit },
         { $sort: sortOrder },
-      ]);
+      ])
+      .exec();
   }
 
   public updateOffer(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
@@ -116,42 +129,62 @@ export class DefaultOfferService implements OfferService {
     return premiumOffers;
   }
 
-  public async getAllFavoriteOffersByUser(userId: string): Promise<DocumentType<OfferEntity>[]> {
-    const favoriteOffers = await this.userModel.aggregate([
-      {
-        $match: { _id: new mongoose.Types.ObjectId(userId) }
-      },
-      {
-        $project: {
-          _id: 1,
-          favorites: {
-            $map: {
-              input: '$favorites',
-              as: 'fav',
-              in: {
-                $toObjectId: '$$fav'
-              }
-            }
-          }
-        }
-      }, {
-        $lookup: {
-          from: 'offers',
-          localField: 'favorites',
-          foreignField: '_id',
-          as: 'favoriteOffers'
-        }
-      }, {
-        $unwind: {
-          path: '$favoriteOffers'
-        }
-      }, {
-        $unset: [
-          'favorites', '_id'
-        ]
-      }
-    ]).exec();
-    return favoriteOffers;
+  // public async getAllFavoriteOffersByUser(userId: string): Promise<DocumentType<OfferEntity>[]> {
+  //   const favoriteOffers = await this.userModel.aggregate([
+  //     {
+  //       $match: { _id: new mongoose.Types.ObjectId(userId) }
+  //     },
+  //     {
+  //       $project: {
+  //         _id: 1,
+  //         favorites: {
+  //           $map: {
+  //             input: '$favorites',
+  //             as: 'fav',
+  //             in: {
+  //               $toObjectId: '$$fav'
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }, {
+  //       $lookup: {
+  //         from: 'offers',
+  //         localField: 'favorites',
+  //         foreignField: '_id',
+  //         as: 'favoriteOffers'
+  //       }
+  //     }, {
+  //       $unwind: {
+  //         path: '$favoriteOffers'
+  //       }
+  //     }, {
+  //       $unset: [
+  //         'favorites', '_id'
+  //       ]
+  //     }
+  //   ]).exec();
+  //   return favoriteOffers;
+  // }
+  public async getAllFavoriteOffersByUser(
+    userId: string,
+  ): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .aggregate([
+        ...getUserPipeline(userId),
+        {
+          $match: {
+            $expr: {
+              $in: ['$_id', '$user.favorites'],
+            },
+          },
+        },
+        { $sort: { postDate: SortOrder.Desc } },
+        ...this.commentLookupPipeline,
+        // ...authorPipeline,
+        ...defaultPipeline,
+      ])
+      .exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {
@@ -164,5 +197,10 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, {'$inc': {
         commentCount: 1,
       }}).exec();
+  }
+
+  public async isAuthor(tokenPayloadId: string, documentId: string): Promise<boolean> {
+    const offer = await this.offerModel.findById(documentId);
+    return offer?.authorId.toString() === tokenPayloadId;
   }
 }

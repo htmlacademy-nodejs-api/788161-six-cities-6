@@ -28,10 +28,10 @@ export class OfferPreviewRdo {
   public isPremium: boolean;
 
   @Expose()
-  public isFavorite: boolean;
+  public favorites: boolean;
 
   @Expose()
-  public rating: number;
+  public averageRating: number;
 
   @Expose()
   public rentalCost: number;

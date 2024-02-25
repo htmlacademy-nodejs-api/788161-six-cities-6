@@ -1,9 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
-  HttpError,
+  DocumentExistsMiddleware,
   HttpMethod,
   PrivateRouteMiddleware,
   ValidateDtoMiddleware
@@ -33,7 +32,8 @@ export default class CommentController extends BaseController {
       handler: this.create,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateDtoMiddleware(CreateCommentDto)
+        new ValidateDtoMiddleware(CreateCommentDto),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
   }
@@ -43,15 +43,10 @@ export default class CommentController extends BaseController {
     res: Response
   ): Promise<void> {
 
-    if (! await this.offerService.exists(body.offerId)) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Offer with id ${body.offerId} not found.`,
-        'CommentController'
-      );
-    }
-
-    const comment = await this.commentService.createComment({...body, authorId: tokenPayload.id});
+    const comment = await this.commentService.createComment({
+      ...body,
+      authorId: tokenPayload.id
+    });
     this.created(res, fillDTO(CommentRdo, comment));
   }
 }
