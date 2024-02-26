@@ -619,7 +619,7 @@ components:
         authorId:
           type: string
           required: true
-        commentsAmount:
+        totalComments:
           type: integer
         location:
           type: object
@@ -671,7 +671,7 @@ components:
         rentalCost:
           type: number
           required: true
-        commentsAmount:
+        totalComments:
           type: integer
         location:
           $ref: '#/components/schemas/location'

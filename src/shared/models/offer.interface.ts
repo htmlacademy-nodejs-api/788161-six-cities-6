@@ -20,6 +20,6 @@ export interface RentalOffer {
     rentalCost: number;
     facilities: Facilities[];
     author: User;
-    commentsAmount?: number;
+    totalComments?: number;
     location: Coordinates;
 }

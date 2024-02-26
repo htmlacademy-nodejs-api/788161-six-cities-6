@@ -1,17 +1,18 @@
 
-# Получить детальную инфу для объявления по идентификатору РАБОТАЕТ TO DO: список полей + рейтинг + избранное
-GET http://localhost:5000/offers/65db15b81abcb6791779a1ee HTTP/1.1
+# Получить детальную инфу для объявления по идентификатору РАБОТАЕТ TO DO: комментарии
+GET http://localhost:5000/offers/65c887cd45379eb06d07c929 HTTP/1.1
 
 ###
 
-## Получить список объявлений РАБОТАЕТ, TO DO: список полей
+## Получить список объявлений РАБОТАЕТ, TO DO: комментарии
 GET http://localhost:5000/offers HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+
 
 ###
 
 ## создать объявление РАБОТАЕТ
 POST http://localhost:5000/offers HTTP/1.1
-# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 Content-Type: application/json
 
@@ -51,15 +52,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0Iiwib
 
 ###
 
-## Редактировать объявление  РАБОТАЕТ TO DO добавить избранное + поле рейтинг
+## Редактировать объявление  РАБОТАЕТ TO DO добавить комменты
 
 PATCH http://localhost:5000/offers/65db15b81abcb6791779a1ee HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
 Content-Type: application/json
 
 {
-  "title": "Modern villa in near see for Mary. Updated again",
-  "rentalCost": 1100
+  "title": "Modern villa in near see for Mary. Updated again 3333",
+  "rentalCost": 1500,
+  "apartmentType": "House"
 }
 
 ###
@@ -69,19 +71,27 @@ GET http://localhost:5000/offers/65db15b81abcb6791779a1ee/comments HTTP/1.1
 
 ###
 
-## Список избранных РАБОТАЕТ
+## Список избранных РАБОТАЕТ TO DO добавить комменты 
 
 GET http://localhost:5000/offers/favorites
 # Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg4MDUzMywiZXhwIjoxNzA5MDUzMzMzfQ.j4sDavmwhol40ahfnL0t2xXyVe5U_C29XaFlL_EFclE
+
 ###
 
-## Список премиальных  РАБОТАЕТ
+## Список премиальных  РАБОТАЕТ  TO DO добавить комменты
 GET http://localhost:5000/offers/premium?city=Paris
 
 ###
 
 ## Добавление/удаление предложения в/из избранное. НЕ РАБОТАЕТ
 
-PUT http://localhost:5000/offers/65db15b81abcb6791779a1ee/favorite
+PUT http://localhost:5000/offers/65c887cd45379eb06d07c929/favorite
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+Content-Type: application/json
+
+{
+  "favorites": true
+}
+
+###

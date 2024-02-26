@@ -42,39 +42,9 @@ export class DefaultUserService implements UserService {
   }
 
   public updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel.findByIdAndUpdate(userId, dto, {new: true})
+    return this.userModel
+      .findByIdAndUpdate(userId, dto, { new: true })
       .populate(['favorites'])
       .exec();
   }
-
-  public async addOfferToFavorite(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
-    try {
-      const updatedUser = await this.userModel.findByIdAndUpdate(
-        userId,
-        { $push: { favorites: offerId } },
-        { new: true }
-      );
-
-      return updatedUser;
-    } catch (error) {
-      this.logger.info('Error adding offer to favorites');
-      return null;
-    }
-  }
-
-  public async removeOfferFromFavorites(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
-    try {
-      const updatedUser = await this.userModel.findByIdAndUpdate(
-        userId,
-        { $pull: { favorites: offerId } },
-        { new: true }
-      );
-
-      return updatedUser;
-    } catch (error) {
-      this.logger.info('Error removing offer from favorites:');
-      return null;
-    }
-  }
-
 }
