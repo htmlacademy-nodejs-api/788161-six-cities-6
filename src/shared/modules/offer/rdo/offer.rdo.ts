@@ -28,10 +28,10 @@ export class OfferRdo {
   public premium: boolean;
 
   @Expose()
-  public favorite: boolean;
+  public favorites: boolean;
 
   @Expose()
-  public rating: number;
+  public averageRating: number;
 
   @Expose()
   public apartmentType: ApartmentType;
@@ -54,7 +54,7 @@ export class OfferRdo {
   @Expose()
   public totalComments: number;
 
-  @Expose({ name: 'author'}) //authorId
+  @Expose({ name: 'author'})
   @Type(() => UserRdo)
   public author: UserRdo;
 }

@@ -71,7 +71,7 @@
       ["Private beach", "Pool", "Garden"],
       ["Fireplace", "Garden view", "Pet-friendly"]
     ],
-    "commentsAmounts": [25, 15, 30, 10, 20],
+    "totalCommentss": [25, 15, 30, 10, 20],
     "locations": [
       { "latitude": 48.85661, "longitude": 2.351499 },
       { "latitude": 53.550341, "longitude": 10.000654 },

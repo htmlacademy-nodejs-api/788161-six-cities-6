@@ -11,8 +11,8 @@ export class DocumentExistsMiddleware implements Middleware {
     private readonly paramName: string,
   ) {}
 
-  public async execute({ params }: Request, _res: Response, next: NextFunction): Promise<void> {
-    const documentId = params[this.paramName];
+  public async execute({ params, body }: Request, _res: Response, next: NextFunction): Promise<void> {
+    const documentId = params[this.paramName] ?? body[this.paramName];
     if (! await this.service.exists(documentId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
