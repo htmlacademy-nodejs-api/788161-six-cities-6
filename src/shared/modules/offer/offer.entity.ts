@@ -33,8 +33,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public city: City;
 
-  @prop()
-  public previewImage: string;
 
   @prop({ required: true })
   public housingPhotos: string[];

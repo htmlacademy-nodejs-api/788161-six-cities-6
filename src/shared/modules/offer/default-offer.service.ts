@@ -5,7 +5,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, mongoose, types } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto, UpdateOfferDto } from './index.js';
-import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
+import { DEFAULT_OFFER_AMOUNT, OFFER_PREMIUM_COUNT } from './offer.constant.js';
 import { SortOrder } from '../../models/sort-type.enum.js';
 import {
   authorPipeline,
@@ -14,6 +14,7 @@ import {
   getPipeline,
 } from './offer.aggregation.js';
 import { UserEntity } from '../user/user.entity.js';
+import { UploadOfferImagesDto } from './dto/upload-offer-images.dto.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -71,7 +72,7 @@ export class DefaultOfferService implements OfferService {
 
   public updateOffer(
     offerId: string,
-    dto: UpdateOfferDto
+    dto: UpdateOfferDto | UploadOfferImagesDto
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findByIdAndUpdate(offerId, dto, {new: true}).exec();
   }
@@ -85,7 +86,7 @@ export class DefaultOfferService implements OfferService {
   async getPremiumOffersByCity(
     userId: string | undefined,
     city: string,
-    limit = DEFAULT_OFFER_PREMIUM_COUNT
+    limit = OFFER_PREMIUM_COUNT
   ): Promise<DocumentType<OfferEntity>[]> {
     const premiumOffers = await this.offerModel.aggregate([
       {

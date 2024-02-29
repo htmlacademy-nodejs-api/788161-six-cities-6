@@ -95,3 +95,19 @@ Content-Type: application/json
 }
 
 ###
+
+## Загрузить изображение для объявления
+POST http://localhost:5000/offers/65db15b81abcb6791779a1ee/images HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="paris.png"
+Content-Type: image/png
+
+< /Users/marianna/Desktop/paris.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+###

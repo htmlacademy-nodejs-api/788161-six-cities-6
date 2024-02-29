@@ -20,6 +20,8 @@ import { LoginUserRequest } from './login-user-request.type.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { ALLOWED_AVATAR_IMAGE_TYPES } from './user.constant.js';
 
 
 @injectable()
@@ -64,15 +66,15 @@ export class UserController extends BaseController {
       handler: this.uploadAvatar,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar', ALLOWED_AVATAR_IMAGE_TYPES),
       ],
     });
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+  public async uploadAvatar({ tokenPayload: { id }, file }: Request, res: Response) {
+    const uploadedFile = { avatar: file?.filename };
+    await this.userService.updateById(id, uploadedFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadedFile.avatar }));
   }
 
   public async login(
@@ -81,11 +83,8 @@ export class UserController extends BaseController {
   ): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
-      token,
-    });
-    this.ok(res, responseData);
+    const responseData = fillDTO(LoggedUserRdo, user);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {

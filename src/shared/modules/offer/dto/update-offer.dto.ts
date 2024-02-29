@@ -20,14 +20,6 @@ export class UpdateOfferDto {
   @IsEnum(City, { message: UpdateOfferValidationMessage.city.invalid })
   public city?: City;
 
-  @IsOptional()
-  @MaxLength(256, { message: UpdateOfferValidationMessage.previewImage.maxLength })
-  public previewImage?: string;
-
-  @IsOptional()
-  @IsArray({ message: UpdateOfferValidationMessage.housingPhotos.invalidFormat })
-  @MaxLength(256, { each: true, message: UpdateOfferValidationMessage.housingPhotos.maxLength })
-  public housingPhotos?: string[];
 
   @IsOptional()
   @IsBoolean({ message: UpdateOfferValidationMessage.premium.invalidFormat })
