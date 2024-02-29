@@ -28,6 +28,11 @@ Content-Type: application/json
   "password": "test1234"
 }
 
+# {
+#   "email": "mary-2@gmail.net",
+#   "password": "test1234"
+# }
+
 ###
 
 

@@ -15,11 +15,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0Iiwib
 
 ## создать объявление РАБОТАЕТ
 POST http://localhost:5000/offers HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
 Content-Type: application/json
 
 {
-  "title": "Modern villa in near see for Mary",
+  "title": "Offer for deleting",
   "description": "Large villa near see. Mountin view",
   "publicationDate": "2023-09-06T08:45:40.283Z",
   "city": "Paris",
@@ -49,8 +49,8 @@ Content-Type: application/json
 
 ## Удалить объявление по идентификатору РАБОТАЕТ
 
-DELETE http://localhost:5000/offers/65db15671abcb6791779a1e8 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+DELETE http://localhost:5000/offers/65e0f68f016207473cc7ba51 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTI0MjMyNiwiZXhwIjoxNzA5NDE1MTI2fQ.O8tgyBdwbWUse3kFaBH4TQkJvYzmEcmt6hZ82a08pD0
 
 ###
 

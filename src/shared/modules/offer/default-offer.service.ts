@@ -151,10 +151,10 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async isAuthor(
-    tokenPayloadId: string,
+    authorId: string,
     documentId: string
   ): Promise<boolean> {
     const offer = await this.offerModel.findById(documentId);
-    return offer?.authorId.toString() === tokenPayloadId;
+    return offer?.authorId.toString() === authorId;
   }
 }

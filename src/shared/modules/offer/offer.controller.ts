@@ -35,6 +35,7 @@ import { UserService } from '../user/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { StatusCodes } from 'http-status-codes';
+import { ValidateUserMiddleware } from '../../libs/rest/middleware/validate-user.middleware.js';
 
 
 @injectable()
@@ -99,7 +100,7 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        // TO DO определить что авторизованный пользователь - автор
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
 
@@ -111,7 +112,7 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        // TO DO определить что авторизованный пользователь - автор
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
 
@@ -145,7 +146,7 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        // TO DO определить что авторизованный пользователь - автор
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId'),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image',
           ALLOWED_IMAGE_TYPES,
           OFFER_IMAGES_AMOUNT)
