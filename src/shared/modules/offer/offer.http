@@ -1,12 +1,14 @@
 
 # Получить детальную инфу для объявления по идентификатору РАБОТАЕТ TO DO: комментарии
-GET http://localhost:5000/offers/65c887cd45379eb06d07c929 HTTP/1.1
+GET http://localhost:5000/offers/65e0def949327b5bf45d2ad4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
+
 
 ###
 
 ## Получить список объявлений РАБОТАЕТ, TO DO: комментарии
 GET http://localhost:5000/offers HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
 
 
 ###
@@ -84,10 +86,10 @@ GET http://localhost:5000/offers/premium?city=Paris
 
 ###
 
-## Добавление/удаление предложения в/из избранное. НЕ РАБОТАЕТ
+## Добавление/удаление предложения в/из избранное.
 
-PUT http://localhost:5000/offers/65c887cd45379eb06d07c929/favorite
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg1NjYyNywiZXhwIjoxNzA5MDI5NDI3fQ.sPPW4Z_CjzZGxF83u8n4fBShC3Ypc8BxajHBfmRqAL0
+PUT http://localhost:5000/offers/65e0def949327b5bf45d2ad4/favorite
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
 Content-Type: application/json
 
 {

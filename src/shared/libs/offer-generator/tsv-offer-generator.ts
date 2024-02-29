@@ -4,7 +4,7 @@ import { MockServerData } from '../../models/mock-server-data.type.js';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { GUESTS, LATITUDE_RANGE, LONGITUDE_RANGE, PRICE, ROOMS, WEEK_DAY } from './offer-conditions.js';
 import { Facilities } from '../../models/facilities.enum.js';
-import { UserType } from '../../models/index.js';
+import { ApartmentType, UserType } from '../../models/index.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData){}
@@ -12,7 +12,6 @@ export class TSVOfferGenerator implements OfferGenerator {
   public generate(): string {
     const title = getRandomItem<string>(this.mockData.titles);
     const description = getRandomItem<string>(this.mockData.descriptions);
-    const previewImage = getRandomItem<string>(this.mockData.previewImages);
     const roomImages = getRandomItems<string>(this.mockData.roomImages).join(';');
     const user = getRandomItem(this.mockData.users);
     const email = getRandomItem(this.mockData.emails);
@@ -23,9 +22,9 @@ export class TSVOfferGenerator implements OfferGenerator {
       .subtract(generateRandomValue(WEEK_DAY.FIRST, WEEK_DAY.LAST), 'day')
       .toISOString();
 
-    const city = getRandomItem<string>(this.mockData.cities);
+    const city = getRandomItem(this.mockData.cities);
     const isPremium = getRandomItem<boolean>([true, false]);
-    const apartmentType = getRandomItem<string>(this.mockData.apartmentTypes);
+    const apartmentType = getRandomItem(Object.values(ApartmentType));
     const roomAmount = generateRandomValue(ROOMS.MIN, ROOMS.MAX);
     const guestAmount = generateRandomValue(GUESTS.MIN, GUESTS.MAX);
     const price = generateRandomValue(PRICE.MIN, PRICE.MAX);
@@ -38,14 +37,13 @@ export class TSVOfferGenerator implements OfferGenerator {
     return [
       title,
       description,
-      previewImage,
       roomImages,
       user,
       email,
       userType,
       avatar,
       createPostData,
-      city,
+      city.name,
       isPremium,
       apartmentType,
       roomAmount,

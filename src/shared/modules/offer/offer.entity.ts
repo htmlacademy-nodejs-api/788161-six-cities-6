@@ -26,6 +26,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public publicationDate: Date;
 
+  @prop({ type: String })
+  public previewImage: string;
+
   @prop({
     type: String,
     enum: City,
@@ -34,7 +37,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public city: City;
 
 
-  @prop({ required: true })
+  @prop({ type: [String] })
   public housingPhotos: string[];
 
 
