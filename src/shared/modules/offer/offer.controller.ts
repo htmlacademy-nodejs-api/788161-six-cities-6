@@ -2,8 +2,10 @@ import { inject, injectable } from 'inversify';
 import {
   BaseController,
   DocumentExistsMiddleware,
+  HttpError,
   HttpMethod,
   PrivateRouteMiddleware,
+  UploadFileMiddleware,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
@@ -19,8 +21,10 @@ import { UpdateOfferRequest } from './update-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
 import {
   DEFAULT_OFFER_AMOUNT,
-  DEFAULT_OFFER_PREMIUM_COUNT,
-  MAX_OFFER_AMOUNT
+  OFFER_PREMIUM_COUNT,
+  MAX_OFFER_AMOUNT,
+  OFFER_IMAGES_AMOUNT,
+  ALLOWED_IMAGE_TYPES,
 } from './offer.constant.js';
 import { CommentService } from '../comment/comment-service.interface.js';
 import { CommentRdo } from '../comment/index.js';
@@ -28,6 +32,10 @@ import { CreateOfferDto, UpdateOfferDto } from './index.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
 import { FavoriteOfferRequest } from './type/favorite-offer-request.type.js';
 import { UserService } from '../user/index.js';
+import { Config, RestSchema } from '../../libs/config/index.js';
+import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
+import { StatusCodes } from 'http-status-codes';
+import { ValidateUserMiddleware } from '../../libs/rest/middleware/validate-user.middleware.js';
 
 
 @injectable()
@@ -36,7 +44,8 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.CommentService) private readonly commentService: CommentService,
-    @inject(Component.UserService) private readonly userService: UserService
+    @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.Config) private readonly configService: Config<RestSchema>,
   ) {
     super(logger);
     this.logger.info('Refister routes for OfferController...');
@@ -91,7 +100,7 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        // TO DO определить что авторизованный пользователь - автор
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
 
@@ -103,7 +112,7 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        // TO DO определить что авторизованный пользователь - автор
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
 
@@ -126,6 +135,21 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(FavoriteOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
+
+    this.addRoute({
+      path: '/:offerId/images',
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateUserMiddleware(this.offerService, 'Offer', 'offerId'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image',
+          ALLOWED_IMAGE_TYPES,
+          OFFER_IMAGES_AMOUNT)
       ]
     });
   }
@@ -154,7 +178,7 @@ export class OfferController extends BaseController {
     const offers = await this.offerService.getPremiumOffersByCity(
       tokenPayload?.id,
       query.city as string,
-      DEFAULT_OFFER_PREMIUM_COUNT
+      OFFER_PREMIUM_COUNT
     );
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
@@ -210,5 +234,18 @@ export class OfferController extends BaseController {
   ): Promise<void> {
     const offer = await this.offerService.findOfferById(tokenPayload?.id, offerId);
     this.ok(res, fillDTO(OfferRdo, offer));
+  }
+
+  public async uploadImages({ params, files }: Request<ParamOfferId>, res: Response) {
+    if (!Array.isArray(files)) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No files uploaded');
+    }
+    const { offerId } = params;
+    const housingPhotos = files?.map((file) => file.filename) ?? [];
+    const updateDto = {
+      housingPhotos: housingPhotos
+    };
+    await this.offerService.updateOffer(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 }

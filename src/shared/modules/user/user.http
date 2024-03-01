@@ -5,7 +5,7 @@ POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "mary@gmail.net",
+  "email": "mary-2@gmail.net",
   "avatar": "avatar.png",
   "name": "Mary",
   "password": "test1234",
@@ -28,28 +28,33 @@ Content-Type: application/json
   "password": "test1234"
 }
 
+# {
+#   "email": "mary-2@gmail.net",
+#   "password": "test1234"
+# }
+
 ###
 
 
 ## Отправить изображение
 
-POST http://localhost:5000/users/65c15a57510a281b0531818e/avatar HTTP/1.1
+POST http://localhost:5000/users/avatar HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1OTgzNCwiZXhwIjoxNzA5MzMyNjM0fQ.ZQ2lbWFddCgEoMi9hE_gyX2S4wjtgqnqz5NeJu4kJLI
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="avatar"; filename="screen.png"
 Content-Type: image/png
 
-< /Users/marianna/Documents/788161-six-cities-6/markup/img/amsterdam@2x.jpg
+< /Users/marianna/Desktop/paris.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
-
 ###
+
 ## Проверить токен пользователя
 
 GET http://localhost:5000/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwODg4MDUzMywiZXhwIjoxNzA5MDUzMzMzfQ.j4sDavmwhol40ahfnL0t2xXyVe5U_C29XaFlL_EFclE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Im1hcnlAZ21haWwubmV0IiwibmFtZSI6Ik1hcnkiLCJpZCI6IjY1ZGIxNTExMWFiY2I2NzkxNzc5YTFlNSIsImlhdCI6MTcwOTE1ODU2MiwiZXhwIjoxNzA5MzMxMzYyfQ.DjebHp8MFJRIZ0MxqQRULcavTKxeyT0T7bBacijGFTg
 # eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjVkOWM1ODVjZTNkYmU3ZjE3YWQ2MWMyIiwiaWF0IjoxNzA4Nzc2ODQzLCJleHAiOjE3MDg5NDk2NDN9.9ZP8nH0pJqXSIicJjmWBlD8c1mUjHhfYbMilWWOaLio
 
 ###

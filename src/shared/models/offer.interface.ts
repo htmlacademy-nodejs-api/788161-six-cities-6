@@ -9,7 +9,6 @@ export interface RentalOffer {
     description: string;
     publicationDate: Date;
     city: City;
-    previewImage: string;
     housingPhotos: string[];
     premium: boolean;
     favorite?: boolean;

@@ -16,11 +16,13 @@
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
     "ts": "ts-node",
-    "mock:server": "json-server ./mocks/mock-server-data.json --port 3123"
+    "mock:server": "json-server ./mocks/mock-server-data.json --port 3123",
+    "cli": "ts-node ./src/main.cli.ts"
   },
   "devDependencies": {
     "@types/convict": "^6.1.4",
     "@types/convict-format-with-validator": "^6.0.3",
+    "@types/cors": "^2.8.15",
     "@types/express": "^4.17.18",
     "@types/mime-types": "^2.1.2",
     "@types/multer": "^1.4.8",
@@ -47,6 +49,7 @@
     "class-validator": "^0.14.0",
     "convict": "^6.2.4",
     "convict-format-with-validator": "^6.2.0",
+    "cors": "^2.8.5",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

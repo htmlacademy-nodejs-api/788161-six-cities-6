@@ -22,29 +22,12 @@ export const getUserPipeline = (userId: string) => [
 
 
 export const defaultPipeline = [
-// {
-  // $addFields: {
-  //   totalComments: {
-  //     $size: '$comments'
-  //   },
-  //   averageRating: {
-  //     $cond: {
-  //       if: { $isArray: '$comments' },
-  //       then: { $ifNull: [{ $avg: '$comments.rating' }, 0] },
-  //       else: 0 // Or any default value you prefer
-  //     }
-  //   },
-  //   favorites: { $in: ['$_id', { $ifNull: ['$user.favorites', []] }] },
-  // }
-// },
   {
     $project: {
       _id: 0,
       id: { $toString: '$_id' },
       author: 1,
       city: 1,
-      // averageRating: 1,
-      // favorites: 1,
       averageRating: { $ifNull: [{ $avg: '$comments.rating' }, 0] },
       favorites: { $in: ['$_id', { $ifNull: ['$user.favorites', []] }] },
       totalComments: { $size: '$comments' },

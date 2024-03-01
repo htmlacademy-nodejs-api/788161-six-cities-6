@@ -17,7 +17,6 @@ export function createOffer(offerData: string): RentalOffer {
   const [
     title,
     description,
-    previewImage,
     housingPhotosList,
     name,
     email,
@@ -39,7 +38,6 @@ export function createOffer(offerData: string): RentalOffer {
   return {
     title,
     description,
-    previewImage,
     housingPhotos,
     author: {
       email,

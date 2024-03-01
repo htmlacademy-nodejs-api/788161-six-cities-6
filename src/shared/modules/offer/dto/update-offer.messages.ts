@@ -10,13 +10,6 @@ export const UpdateOfferValidationMessage = {
   publicationDate: {
     invalidFormat: 'publicationDate must be a valid ISO date',
   },
-  previewImage: {
-    maxLength: 'Too long for field «image».',
-  },
-  housingPhotos: {
-    invalidFormat: 'Images must be an array',
-    maxLength: 'Too long for field «images»',
-  },
   rentalCost: {
     invalidFormat: 'Rental cost must be an integer',
     minValue: 'Minimum price is 100',
