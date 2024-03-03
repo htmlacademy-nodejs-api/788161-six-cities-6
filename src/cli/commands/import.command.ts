@@ -13,10 +13,10 @@ import { getMongoURI } from '../../shared/helpers/database.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 
 export class ImportCommand implements Command {
-  private userService: UserService;
-  private offerService: OfferService;
-  private databaseClient: DatabaseClient;
-  private logger: Logger;
+  private readonly userService: UserService;
+  private readonly offerService: OfferService;
+  private readonly databaseClient: DatabaseClient;
+  private readonly logger: Logger;
   private salt: string;
 
   constructor() {

@@ -1,3 +1,4 @@
+import { RADIX } from '../../cli/index.js';
 import { City } from '../models/city.enum.js';
 import { ApartmentType, Coordinates, Facilities, facilitiesMapping } from '../models/index.js';
 import { RentalOffer } from '../models/offer.interface.js';
@@ -50,9 +51,9 @@ export function createOffer(offerData: string): RentalOffer {
     city: City[cityValue as keyof typeof City],
     premium :  Boolean(isPremium),
     apartmentType: ApartmentType[apartmentType as keyof typeof ApartmentType],
-    roomAmount:  Number.parseInt(roomAmount, 10),
-    guestAmount: Number.parseInt(guestAmount, 10),
-    rentalCost: Number.parseInt(rentalCost, 10),
+    roomAmount:  Number.parseInt(roomAmount, RADIX),
+    guestAmount: Number.parseInt(guestAmount, RADIX),
+    rentalCost: Number.parseInt(rentalCost, RADIX),
     facilities,
     location: parseLocation(location)
   };

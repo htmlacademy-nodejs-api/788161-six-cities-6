@@ -7,22 +7,19 @@ import { StatusCodes } from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
 import { PathTransformer } from '../transform/path-transformer.js';
 import { Component } from '../../../models/index.js';
-
-const DEFAULT_CONTENT_TYPE = 'application/json';
+import { DEFAULT_CONTENT_TYPE } from './controller.constant.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
-  private readonly _router: Router;
+  private readonly exptessRouter: Router = Router();
   @inject(Component.PathTransformer) private pathTransformer: PathTransformer;
 
   constructor(
     protected readonly logger: Logger
-  ) {
-    this._router = Router();
-  }
+  ) {}
 
   get router() {
-    return this._router;
+    return this.exptessRouter;
   }
 
   public addRoute(route: Route) {
@@ -31,7 +28,7 @@ export abstract class BaseController implements Controller {
       (item) => asyncHandler(item.execute.bind(item))
     );
     const allHandlers = middlewareHandlers ? [...middlewareHandlers, wrapperAsyncHandler] : wrapperAsyncHandler;
-    this._router[route.method](route.path, allHandlers);
+    this.exptessRouter[route.method](route.path, allHandlers);
     this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
   }
 

@@ -7,7 +7,7 @@ import { RestSchema } from '../../libs/config/rest.schema.js';
 import { Logger } from '../../libs/logger/index.js';
 import { UserEntity, UserService } from '../user/index.js';
 import { Config } from '../../libs/config/index.js';
-import { JWT_ALGORITHM, JWT_EXPIRED } from './auth.constant.js';
+import { JWTConstants } from './auth.constant.js';
 import { LoginUserDto } from '../user/dto/login-user.dto.js';
 import { TokenPayload } from './types/token-payload.js';
 import { UserNotFoundException, UserPasswordIncorrectException } from './errors/index.js';
@@ -32,9 +32,9 @@ export class DefaultAuthService implements AuthService {
 
     this.logger.info(`Create token for ${user.email}`);
     return new SignJWT(tokenPayload)
-      .setProtectedHeader({ alg: JWT_ALGORITHM })
+      .setProtectedHeader({ alg: JWTConstants.JWT_ALGORITHM })
       .setIssuedAt()
-      .setExpirationTime(JWT_EXPIRED)
+      .setExpirationTime(JWTConstants.JWT_EXPIRED)
       .sign(secretKey);
   }
 

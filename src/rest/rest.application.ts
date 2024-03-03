@@ -7,11 +7,12 @@ import { Component } from '../shared/models/component.enum.js';
 import { DatabaseClient } from '../shared/libs/database-client/database-client.interface.js';
 import { getFullServerPath, getMongoURI } from '../shared/helpers/index.js';
 import { Controller, ExceptionFilter, ParseTokenMiddleware } from '../shared/libs/rest/index.js';
-import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from './rest.constant.js';
+import { Routes } from './rest.constant.js';
 
 @injectable()
 export class RestApplication {
-  private readonly server: Express;
+  private server: Express = express();
+
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.Config) private readonly config: Config<RestSchema>,
@@ -23,9 +24,7 @@ export class RestApplication {
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
     @inject(Component.HttpExceptionFilter) private readonly httpExceptionFilter: ExceptionFilter,
     @inject(Component.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilter,
-  ) {
-    this.server = express();
-  }
+  ) {}
 
   private async _initServer() {
     const port = this.config.get('PORT');
@@ -53,12 +52,12 @@ export class RestApplication {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
     this.server.use(express.json());
     this.server.use(
-      STATIC_UPLOAD_ROUTE,
+      Routes.STATIC_UPLOAD_ROUTE,
       express.static(this.config.get('UPLOAD_DIRECTORY'))
     );
     this.server.use(
-      STATIC_FILES_ROUTE,
-      express.static(this.config.get('STATIC_DIRECTORY_PATH'))
+      Routes.STATIC_FILES_ROUTE,
+      express.static(this.config.get('STATIC_DIRECTORY'))
     );
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
     this.server.use(cors());

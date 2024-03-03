@@ -13,7 +13,6 @@ export class UploadFileMiddleware implements Middleware {
   ) {}
 
   public async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log('UploadFileMiddleware');
     const storage = diskStorage({
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
@@ -26,7 +25,6 @@ export class UploadFileMiddleware implements Middleware {
 
     const uploadFileMiddleware = multer({
       storage, fileFilter: (_req, file, callback) => {
-        console.log('MIME TYPE', file.mimetype);
         if (!this.allowedTypes.includes(file.mimetype)) {
           return callback(new Error(`${file.mimetype} is not allowed. Only .jpg and .png allowed`));
         }

@@ -13,10 +13,10 @@ export class HelpCommand implements Command {
         ${chalk.bold('Пример')}
             cli.js --<command> [--arguments]
         ${chalk.bold('Команды:')}
-            --version:                   # выводит номер версии
-            --help:                      # печатает этот текст
-            --import <path>:             # импортирует данные из TSV
-            --generate <n> <path> <url>  # генерирует произвольное количество тестовых данных
+            --version:                   # выводит номер версии проекта из файла package.json
+            --help:                      # выводит список поддерживаемых приложением команд
+            --import <path>:             # импортирует данные о предложениях об аренде из TSV файла в базу данных
+            --generate <n> <path> <url>  # генерирует заданное количество предложений об аренде в TSV файл
     `);
   }
 }
