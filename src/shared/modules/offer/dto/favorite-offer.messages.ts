@@ -1,5 +1,5 @@
-export const FavoriteOfferMessages = {
-  favorites: {
-    invalidFormat: 'favorites must be a boolean',
+export const FAVORITE_OFFER_MESSAGES = {
+  FAVORITES: {
+    INVALID_FORMAT: 'favorites must be a boolean',
   },
 } as const;

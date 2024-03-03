@@ -7,9 +7,10 @@ import { Command } from './cli/commands/command.interface.js';
 import chalk from 'chalk';
 import { Dirent } from 'node:fs';
 
-const dirPath = './src/cli/commands';
-const fileExtension = '.command.ts';
-
+const COMMAND_CONFIG = {
+  DIR_PATH: './src/cli/commands',
+  FILE_EXTENTION: '.command.ts'
+};
 
 async function getFilesByPattern(directoryPath: string, pattern: string): Promise<string[]> {
   try {
@@ -26,7 +27,7 @@ async function getFilesByPattern(directoryPath: string, pattern: string): Promis
 
 async function bootstrap() {
   const cliApplication = new CLIApplication();
-  const commandFiles = await getFilesByPattern(dirPath, fileExtension);
+  const commandFiles = await getFilesByPattern(COMMAND_CONFIG.DIR_PATH, COMMAND_CONFIG.FILE_EXTENTION);
   const commands: Command[] = [];
   for (const fileName of commandFiles) {
     const importedModule = await import(fileName);

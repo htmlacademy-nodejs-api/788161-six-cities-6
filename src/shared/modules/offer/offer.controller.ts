@@ -159,7 +159,10 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
-  public async toggleFavorite({ body, params, tokenPayload: { id, email } }: FavoriteOfferRequest, res: Response): Promise<void> {
+  public async toggleFavorite(
+    { body, params, tokenPayload: { id, email } }: FavoriteOfferRequest,
+    res: Response
+  ): Promise<void> {
     const user = await this.userService.findByEmail(email);
     const offerId: string = params.offerId as string;
     const favorites = new Set<string>(user!.favorites.map((item) => item._id.toString()));
@@ -173,7 +176,6 @@ export class OfferController extends BaseController {
     this.noContent(res, null);
   }
 
-
   public async getPremiumOffers({ query, tokenPayload }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.getPremiumOffersByCity(
       tokenPayload?.id,
@@ -182,7 +184,6 @@ export class OfferController extends BaseController {
     );
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
-
 
   public async index({ query, tokenPayload }: Request, res: Response): Promise<void> {
     const limit = Number.parseInt(query.limit as string, 10);

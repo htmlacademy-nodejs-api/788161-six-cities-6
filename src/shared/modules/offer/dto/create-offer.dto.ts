@@ -11,50 +11,50 @@ import {
   ValidateNested
 } from 'class-validator';
 import { ApartmentType, City, Coordinates, Facilities } from '../../../models/index.js';
-import { CreateOfferValidationMessage } from './create-offer.messages.js';
+import { CREATE_OFFER_MESSAGES } from './create-offer.messages.js';
+import { DESCRIPTION_LENGTH, GUESTS, RENTAL_COST, ROOMS, TITLE_LENGTH } from '../offer.constant.js';
 
 export class CreateOfferDto {
-  @MinLength(10, { message: CreateOfferValidationMessage.title.minLength})
-  @MaxLength(100, {message: CreateOfferValidationMessage.title.maxLength})
+  @MinLength(TITLE_LENGTH.MIN, { message: CREATE_OFFER_MESSAGES.TITLE.MIN_LENGTH})
+  @MaxLength(TITLE_LENGTH.MAX, {message: CREATE_OFFER_MESSAGES.TITLE.MAX_LENGTH})
   public title: string;
 
-  @MinLength(20, { message: CreateOfferValidationMessage.description.minLength })
-  @MaxLength(1024, { message: CreateOfferValidationMessage.description.maxLength })
+  @MinLength(DESCRIPTION_LENGTH.MIN, { message: CREATE_OFFER_MESSAGES.DESCRIPTION.MIN_LENGTH })
+  @MaxLength(DESCRIPTION_LENGTH.MAX, { message: CREATE_OFFER_MESSAGES.DESCRIPTION.MAX_LENGTH })
   public description: string;
 
-  @IsDateString({}, { message: CreateOfferValidationMessage.publicationDate.invalidFormat })
+  @IsDateString({}, { message: CREATE_OFFER_MESSAGES.PUBLICATION_DATE.INVALID_FORMAT })
   public publicationDate: Date;
 
-  @IsEnum(City, { message: CreateOfferValidationMessage.city.invalid })
+  @IsEnum(City, { message: CREATE_OFFER_MESSAGES.CITY.INVALID_FORMAT })
   public city: City;
 
-  @IsArray({ message: CreateOfferValidationMessage.housingPhotos.invalidFormat })
-  @MaxLength(256, { each: true, message: CreateOfferValidationMessage.housingPhotos.maxLength })
+  @IsArray({ message: CREATE_OFFER_MESSAGES.HOUSING_PHOTOS.INVALID_FORMAT })
   public housingPhotos: string[];
 
-  @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
+  @IsBoolean({ message: CREATE_OFFER_MESSAGES.PREMIUM.INVALID_FORMAT })
   public premium: boolean;
 
-  @IsEnum(ApartmentType, { message: CreateOfferValidationMessage.apartmentType.invalid })
+  @IsEnum(ApartmentType, { message: CREATE_OFFER_MESSAGES.APARTMENT_TYPE.INVALID_FORMAT })
   public apartmentType: ApartmentType;
 
-  @IsInt({ message: CreateOfferValidationMessage.roomAmount.invalidFormat })
-  @Min(1, { message: CreateOfferValidationMessage.roomAmount.minValue })
-  @Max(8, { message: CreateOfferValidationMessage.roomAmount.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.ROOM_AMOUNT.INVALID_FORMAT })
+  @Min(ROOMS.MIN, { message: CREATE_OFFER_MESSAGES.ROOM_AMOUNT.MIN_VALUE })
+  @Max(ROOMS.MAX, { message: CREATE_OFFER_MESSAGES.ROOM_AMOUNT.MAX_VALUE })
   public roomAmount: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.guestAmount.invalidFormat })
-  @Min(1, { message: CreateOfferValidationMessage.guestAmount.minValue })
-  @Max(10, { message: CreateOfferValidationMessage.guestAmount.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.GUEST_AMOUNT.INVALID_FORMAT })
+  @Min(GUESTS.MIN, { message: CREATE_OFFER_MESSAGES.GUEST_AMOUNT.MIN_VALUE })
+  @Max(GUESTS.MAX, { message: CREATE_OFFER_MESSAGES.GUEST_AMOUNT.MAX_VALUE })
   public guestAmount: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.rentalCost.invalidFormat })
-  @Min(100, { message: CreateOfferValidationMessage.rentalCost.minValue })
-  @Max(100000, { message: CreateOfferValidationMessage.rentalCost.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.RENTAL_COST.INVALID_FORMAT })
+  @Min(RENTAL_COST.MIN, { message: CREATE_OFFER_MESSAGES.RENTAL_COST.MIN_VALUE })
+  @Max(RENTAL_COST.MAX, { message: CREATE_OFFER_MESSAGES.RENTAL_COST.MAX_VALUE })
   public rentalCost: number;
 
-  @IsArray({ message: CreateOfferValidationMessage.facilities.invalidFormat })
-  @IsEnum(Facilities, { each: true, message: CreateOfferValidationMessage.facilities.invalid })
+  @IsArray({ message: CREATE_OFFER_MESSAGES.FACILITIES.INVALID_FORMAT })
+  @IsEnum(Facilities, { each: true, message: CREATE_OFFER_MESSAGES.FACILITIES.INVALID })
   public facilities: Facilities[];
 
   public authorId: string;

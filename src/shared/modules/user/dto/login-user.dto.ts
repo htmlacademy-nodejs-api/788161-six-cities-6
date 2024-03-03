@@ -1,10 +1,10 @@
 import { IsEmail, IsString } from 'class-validator';
-import { CreateLoginUserMessage } from './login-user.messages.js';
+import { CREATE_LOGIN_USER_MESSAGES } from './login-user.messages.js';
 
 export class LoginUserDto {
-  @IsEmail({}, { message: CreateLoginUserMessage.email.invalidFormat })
+  @IsEmail({}, { message: CREATE_LOGIN_USER_MESSAGES.EMAIL.INVALID_FORMAT })
   public email: string;
 
-  @IsString({ message: CreateLoginUserMessage.password.invalidFormat })
+  @IsString({ message: CREATE_LOGIN_USER_MESSAGES.PASSWORD.INVALID_FORMAT })
   public password: string;
 }
