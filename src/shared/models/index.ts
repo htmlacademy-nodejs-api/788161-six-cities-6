@@ -1,6 +1,5 @@
 export * from './apartment.interface.js';
 export * from './city.enum.js';
-export * from './comment.interface.js';
 export * from './coordinates.interface.js';
 export * from './facilities.enum.js';
 export * from './offer.interface.js';
